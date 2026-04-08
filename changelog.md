@@ -1,5 +1,20 @@
 # Changelog — Mumega Ecosystem
 
+## 2026-04-08 — The Big Session
+
+- Mapped 31 projects, graded portfolio, reconciled in Notion War Room
+- Consolidated 15 scripts into proper SOS services
+- Built: framework adapters (LangGraph, CrewAI), agent registration, skill discovery
+- Built: analytics flywheel (ingest → decide → act), feedback loop (learn → adapt)
+- Built: microkernel (service registry, event bus, governance)
+- Built: customer dashboard (:8090), outreach engine, billing/auto-provision
+- Built: self-healing in Calcifer, ToRivers bridge, per-tenant OAuth
+- Built: install.sh, sos init CLI, docker-compose, CI/CD, docs
+- First teleportation: AgentLink moved from Mac to server
+- Security: Sentinel (bus monitor), governance (tiered approval), secret rotation
+- Vision pivot: Mumega = AI business operator, not platform
+- Mirror upgraded to A+ (the moat, never deprioritize)
+
 ## 2026-04-06 — OpenClaw Recovery + Revenue Fixes + Concierge Backend
 
 ### Context

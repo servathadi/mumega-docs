@@ -1,28 +1,17 @@
-# System — What's Running
+# System -- What's Running
 
 ## Services (systemd user units)
 
 | Service | Port | Restart | Purpose |
 |---------|------|---------|---------|
 | `sos-mcp-sse` | 6070 | always | MCP SSE/HTTP server |
-| `sos-squad` | 8060 | always | Squad Service — tasks, skills, pipelines |
+| `sos-squad` | 8060 | always | Squad Service -- tasks, skills, pipelines |
 | `mirror` | 8844 | always | Memory API (Supabase pgvector) |
-| `agent-wake-daemon` | — | always | Redis pub/sub → tmux injection |
+| `dashboard` | 8090 | always | Customer-facing dashboard |
+| `calcifer` | -- | always | Watchdog + self-healing (detect, restart, escalate) |
+| `sentinel` | -- | always | Bus security monitor |
+| `agent-wake-daemon` | -- | always | Redis pub/sub -> tmux injection |
 | `bus-bridge` | 6380 | on-failure | HTTP proxy for remote agents |
-| `sovereign-loop` | — | on-failure | Task dispatcher |
-| `calcifer` | — | always | Watchdog + auto-restart |
-| `openclaw-gateway` | 18789 | always | Multi-channel agent gateway |
-| `cortex-events` | — | always | Event-driven brain wakeup |
-| `discord-collab-listener` | — | on-failure | Discord → bus |
-| `redis-discord-bridge` | — | on-failure | Bus → Discord alerts |
-| `mirror` | 8844 | always | Memory API (Supabase pgvector) |
-| `kasra-agent` | — | always | Kasra Claude Code agent |
-| `kasra-agent-watchdog` | — | always | Kasra agent watchdog |
-| `spai-agent` | — | always | SPAI Claude Code agent (autonomous) |
-| `spai-agent-watchdog` | — | always | SPAI agent watchdog |
-| `factory-watchdog` | — | always | Token flow monitor |
-
-**17 services total.**
 
 ## Ports
 
@@ -32,9 +21,8 @@
 | 6379 | Redis |
 | 6380 | Bus Bridge |
 | 8060 | Squad Service |
+| 8090 | Dashboard |
 | 8844 | Mirror API |
-| 18789 | OpenClaw |
-| 3001 | Shabrang CMS |
 
 ## Public Endpoints
 
@@ -43,26 +31,45 @@
 | `mcp.mumega.com` | MCP SSE/HTTP | Token in path or Bearer |
 | `api.mumega.com` | Squad Service | Bearer token |
 | `bus.mumega.com` | Bus Bridge | Bearer token |
-| `mumega-docs.pages.dev` | Developer docs | Public |
 
-## Cron Jobs
+## Flywheel Timers (Monday cycle)
 
-| Schedule | Script | Purpose |
-|----------|--------|---------|
-| `*/5 min` | `mirror-watchdog.sh` | Mirror health check |
-| `*/30 min` | `team-pulse.py` | Team health + Discord report |
-| `*/4 hours` | `social-agent.py` | Social media posts |
-| `*/4 hours` | `metabolism.py digest` | Token spend tracking |
-| `daily 8am` | `product-organism.py dnu` | DNU organism pulse |
-| `daily 1pm` | `discord-standup.py` | Auto standup |
+| Time | Step | What |
+|------|------|------|
+| 5:30 AM | Feedback | Collect results from past week, score outcomes |
+| 6:00 AM | Ingest | Pull analytics data (traffic, conversions, rankings) |
+| 7:00 AM | Decide | Brain scores portfolio, prioritizes next actions |
+| 8:00 AM | Act | Dispatch tasks to squads based on decisions |
 
-## Tmux Sessions
+## Health Check
 
-| Session | Agent | Purpose |
-|---------|-------|---------|
-| kasra | Claude Code (Opus/Sonnet) | Builder |
-| mumega | Claude Code (Opus) | Orchestrator |
-| codex | Codex CLI (GPT-5.4) | Infra |
-| spai | Claude Code (Sonnet) | SitePilot AI |
-| athena | Claude Code | Architecture |
-| river | Gemini CLI | Dormant |
+```bash
+# Full system health
+curl https://mcp.mumega.com/health/full
+
+# Individual service
+systemctl --user status sos-mcp-sse
+systemctl --user status sos-squad
+systemctl --user status mirror
+systemctl --user status dashboard
+systemctl --user status calcifer
+systemctl --user status sentinel
+```
+
+## Docker Compose
+
+All services available via docker-compose for local dev or new deployments:
+
+```bash
+docker-compose up -d        # start all
+docker-compose logs -f      # tail logs
+docker-compose down         # stop all
+```
+
+## Self-Healing (Calcifer)
+
+1. Health check fails or service crashes
+2. Calcifer detects within 30s
+3. Restarts service via systemd
+4. If restart fails 3x, escalates to Discord
+5. Logs incident in Mirror for post-mortem

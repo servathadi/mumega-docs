@@ -1,74 +1,83 @@
 # Mumega
 
-An AI operating system for small businesses. Agents coordinate through a shared bus, execute tasks autonomously, and deliver results to customers — without a human in the loop.
+An AI that operates businesses. Give it a domain + niche. It builds the site, writes the content, drives the traffic, learns what works, and gets smarter monthly. The organism.
 
-## What it does
-
-You onboard a customer with one API call. The system creates tokens, spins up a squad, dispatches a genesis task. Agents pick up work, execute it, and deliver results back to the customer through their inbox.
+## The Organism
 
 ```
-Customer signs up
-  → Tokens generated (bus + memory + squad)
-  → Default squad created
-  → Genesis task dispatched
-  → Agent picks up task
-  → Executes autonomously
-  → Result delivered to customer inbox
-  → Customer pays → tokens replenished → system sustains
+┌─────────────────────────────────────────────────────┐
+│                    KERNEL                            │
+│  ServiceRegistry + EventBus + Governance            │
+├─────────────────────────────────────────────────────┤
+│                   SERVICES                           │
+│  Mirror (memory/moat) │ Squad (tasks) │ Analytics   │
+│  Feedback (learning)  │ Billing       │ Outreach    │
+│  Dashboard (:8090)    │ Health        │ Economy     │
+├─────────────────────────────────────────────────────┤
+│                    AGENTS                            │
+│  12 agents │ multi-model │ self-onboarding          │
+│  Kasra, Codex, Athena, Sol, Worker, Gemma...        │
+├─────────────────────────────────────────────────────┤
+│                     HANDS                            │
+│  SitePilotAI (239 MCP tools) │ WordPress (43% web)  │
+│  LangGraph │ CrewAI │ ToRivers │ Discord adapters    │
+├─────────────────────────────────────────────────────┤
+│                     BRAIN                            │
+│  Gemma 4 (trainable, free) │ per-tenant fine-tuning │
+│  Compounds monthly │ the moat                        │
+└─────────────────────────────────────────────────────┘
 ```
 
-## Architecture
-
-Three data layers, one MCP interface:
-
-- **Redis** — nervous system (real-time messaging, agent wake)
-- **Mirror** — long-term memory (Supabase pgvector, semantic search)
-- **Squad Service** — task orchestration (SQLite, claim semantics, pipelines)
-- **MCP SSE** — unified interface for all agents (`:6070`)
-
-See [architecture/overview.md](architecture/overview.md) for the full diagram.
-
-## Quick start
+## Quick Start
 
 ```bash
-# Connect any MCP client (Claude Code, Antigravity, Claude.ai)
-# with one JSON config:
-{"mcpServers":{"mumega":{"url":"https://mcp.mumega.com/sse/<your-token>"}}}
-```
+# Install
+curl -sSL https://raw.githubusercontent.com/Mumega-com/mumega/main/install.sh | bash
 
-Tools available: `send`, `inbox`, `peers`, `broadcast`, `remember`, `recall`, `memories`, `task_create`, `task_list`, `task_update`, `request`, `onboard`.
+# Initialize
+sos init
+
+# Run all services
+docker-compose up -d
+
+# Or connect any MCP client directly
+{"mcpServers":{"mumega":{"url":"https://mcp.mumega.com/sse/<token>"}}}
+```
 
 ## Documentation
 
 | Section | What |
 |---------|------|
-| [Architecture](architecture/) | System design, data layers, MCP, agents |
-| [Operations](operations/) | Running services, deployment, incidents |
-| [Projects](projects/) | Active customer projects and status |
-| [Vision](vision/) | Product vision, roadmap, Genesis Protocol |
+| [Architecture](architecture/) | Microkernel, services, data layers, multi-tenant |
+| [Operations](operations/) | systemd services, flywheel timers, health checks |
+| [Projects](projects/) | Active businesses the organism operates |
+| [Vision](vision/) | Product vision, roadmap, organism philosophy |
+| [Changelog](changelog.md) | What shipped and when |
+
+## Key Numbers
+
+- 12 agents on the bus (multi-model, multi-location)
+- 239 MCP tools via SitePilotAI
+- 9 core services + kernel
+- Per-tenant isolation (Redis DB, Linux user, Cloudflare tokens)
+- Self-healing via Calcifer (detect, restart, escalate)
 
 ## Team
-
-17 agents on the bus. See [architecture/agents.md](architecture/agents.md) for the full roster.
 
 | Agent | Model | Role |
 |-------|-------|------|
 | Kasra | Claude Opus/Sonnet | Builder + Architect |
-| Athena | GPT-5.4 | Queen — architecture review |
-| Codex | GPT-5.4 | Infra + security |
-| SPAI | Claude Sonnet | SitePilot AI (autonomous) |
-| Mizan | Haiku | Business agent |
+| Athena | GPT-5.4 | Queen -- Root Gatekeeper |
+| Codex | GPT-5.4 | Infra + Security |
 | Sol | Claude Opus | Content |
 | Worker | Haiku 4.5 | Cheap task execution |
-| Gemma | Gemma 4 31B | Free bulk tasks |
+| Gemma Worker | Gemma 4 31B | Free bulk tasks |
 
-## GitHub
-
-[https://github.com/Mumega-com](https://github.com/Mumega-com)
+Full roster: [architecture/agents.md](architecture/agents.md)
 
 ## Built by
 
-[Hadi Servat](https://hadiservat.com) — Digid Inc., Toronto.
+[Hadi Servat](https://hadiservat.com) -- Digid Inc., Toronto.
 
 ## License
 
