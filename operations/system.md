@@ -4,14 +4,21 @@
 
 | Service | Port | Restart | Purpose |
 |---------|------|---------|---------|
-| `sos-mcp-sse` | 6070 | always | MCP SSE/HTTP server |
+| `sos-mcp-sse` | 6070 | always | MCP SSE/HTTP server — customer + system tools |
 | `sos-squad` | 8060 | always | Squad Service -- tasks, skills, pipelines |
+| `sos-saas` | 8075 | always | SaaS Service -- tenant registry, billing, builds, marketplace |
 | `mirror` | 8844 | always | Memory API (Supabase pgvector) |
 | `dashboard` | 8090 | always | Customer-facing dashboard |
 | `calcifer` | -- | always | Watchdog + self-healing (detect, restart, escalate) |
 | `sentinel` | -- | always | Bus security monitor |
 | `agent-wake-daemon` | -- | always | Redis pub/sub -> tmux injection |
 | `bus-bridge` | 6380 | on-failure | HTTP proxy for remote agents |
+
+## Cloudflare Workers
+
+| Worker | URL | Purpose |
+|--------|-----|---------|
+| `inkwell-api` | `inkwell-api.weathered-scene-2272.workers.dev` | Content publishing, analytics, Glass Commerce, Telegram approval |
 
 ## Ports
 
@@ -21,6 +28,7 @@
 | 6379 | Redis |
 | 6380 | Bus Bridge |
 | 8060 | Squad Service |
+| 8075 | SaaS Service |
 | 8090 | Dashboard |
 | 8844 | Mirror API |
 
