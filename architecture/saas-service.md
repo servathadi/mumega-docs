@@ -113,3 +113,46 @@ Set env vars to enable:
 - `STRIPE_PRICE_STARTER`, `STRIPE_PRICE_GROWTH`, `STRIPE_PRICE_SCALE`
 
 Signup creates a Stripe Customer and (for paid plans) a Checkout Session. Checkout URL returned in signup response.
+
+## Auto-Build on Signup
+
+When `POST /signup` is called with `plan` set:
+1. Tenant record created and activated
+2. Welcome pages generated from business name/industry
+3. `POST /builds/enqueue/{slug}` triggered asynchronously
+4. Astro build runs → assets uploaded to Cloudflare KV under `page:{slug}:*`
+5. Tenant subdomain (`{slug}.mumega.com`) immediately serves content via Inkwell Worker
+
+## Build Queue
+
+`BuildQueue` uses a Redis sorted set with priority scoring. Worker loop polls the queue every 5 seconds.
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `POST` | `/builds/enqueue/{slug}` | Queue a build (optionally with priority) |
+| `GET` | `/builds/status` | Current queue depth and running builds |
+
+## Multi-Seat Tokens
+
+Each tenant plan has a seat limit:
+- Starter: 1 seat
+- Growth: 5 seats
+- Scale: unlimited
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `POST` | `/tenants/{slug}/seats` | Create new MCP token (seat) |
+| `GET` | `/tenants/{slug}/seats` | List all seats and their status |
+| `DELETE` | `/tenants/{slug}/seats/{token_id}` | Revoke a seat token |
+
+## Custom Domain Provisioning
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `POST` | `/tenants/{slug}/domain` | Set custom domain — provisions Cloudflare for SaaS custom hostname, writes KV mapping |
+| `DELETE` | `/tenants/{slug}/domain` | Remove custom domain |
+| `GET` | `/resolve/{hostname}` | Resolve hostname → tenant slug (used by Inkwell Worker catch-all) |
+
+## Token Hot-Reload
+
+The MCP server checks `tokens.json` mtime every 30 seconds. New customer tokens from `POST /signup` are recognized immediately without restarting `sos-mcp-sse`.

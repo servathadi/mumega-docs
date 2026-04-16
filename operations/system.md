@@ -19,6 +19,16 @@
 | Worker | URL | Purpose |
 |--------|-----|---------|
 | `inkwell-api` | `inkwell-api.weathered-scene-2272.workers.dev` | Content publishing, analytics, Glass Commerce, Telegram approval |
+| `mumega-edge` | `mumega-edge.workers.dev` | Edge API — auth, signup, billing, dashboard API (D1/KV) |
+
+## DNS Records (Cloudflare)
+
+| Record | Type | Destination | Notes |
+|--------|------|-------------|-------|
+| `*.mumega.com` | A (proxied) | Inkwell Worker | Wildcard — tenant subdomains |
+| `mcp.mumega.com` | — | VPS nginx → :6070 | MCP SSE endpoint |
+| `api.mumega.com` | — | VPS nginx → :8075 | SaaS API; /signup is no-auth |
+| `mumega.com` | — | Cloudflare Pages | mumega-inkwell Pages project |
 
 ## Ports
 
@@ -36,9 +46,15 @@
 
 | URL | Service | Auth |
 |-----|---------|------|
-| `mcp.mumega.com` | MCP SSE/HTTP | Token in path or Bearer |
+| `mumega.com` | Marketing site + blog (Cloudflare Pages) | Public |
+| `mumega.com/connect/` | MCP signup page | Public |
+| `mumega.com/dashboard/` | Customer portal (5 pages) | Customer token |
+| `mcp.mumega.com/sse/{token}` | MCP SSE | Token in path |
+| `mcp.mumega.com/mcp/{token}` | MCP Streamable HTTP | Token in path |
+| `api.mumega.com/signup` | SaaS signup | None (no auth) |
 | `api.mumega.com` | Squad Service | Bearer token |
 | `bus.mumega.com` | Bus Bridge | Bearer token |
+| `*.mumega.com` | Tenant subdomains | Public (KV content) |
 
 ## Flywheel Timers (Monday cycle)
 
