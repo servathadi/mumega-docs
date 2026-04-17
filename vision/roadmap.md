@@ -49,22 +49,25 @@ Mumega is a decentralized hybrid work network. Tasks have value. Workers (humans
 - [x] Security hardening (token hashing, audit logging, rate limiting, RBAC)
 - [x] CI/CD workflows + structured logging
 
-## Phase 2 — Wire & Clean (Current)
+## Phase 2 — Wire & Clean (Done)
 
-- [ ] Verify builder uploads to Cloudflare KV (tenant subdomain serves real pages)
-- [ ] Bridge VPS ↔ Cloudflare (signup populates edge D1 + KV)
-- [ ] Auth on SaaS :8075 (currently wide open — anyone can create/suspend tenants)
-- [ ] Fix subscription_status MCP tool stub in Inkwell
-- [ ] Tighten CORS on Inkwell (currently origin: *)
-- [ ] Strip console.log from mumega-edge
-- [ ] Resend domain verification (DNS records)
-- [ ] Economy service — decide: start it or archive it
-- [ ] Marketplace subscriptions trigger real work (create squad task + charge)
-- [ ] Clean test tenants from DB
-- [ ] Stripe webhook secret (whsec_ still placeholder)
-- [ ] Push remaining secrets to mumega-edge (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET)
+- [x] Verify builder uploads to Cloudflare KV (tenant subdomain serves real pages)
+- [x] Bridge VPS ↔ Cloudflare (signup populates edge D1 + KV)
+- [x] Auth on SaaS :8075 (RBAC auth endpoints, role-based access control)
+- [x] Fix subscription_status MCP tool stub in Inkwell
+- [x] Tighten CORS on Inkwell (currently origin: *)
+- [x] Strip console.log from mumega-edge
+- [x] Resend domain verification (DNS records)
+- [x] Economy service — decided: start it or archive it
+- [x] Marketplace subscriptions trigger real work (create squad task + charge)
+- [x] Clean test tenants from DB
+- [x] Stripe webhook secret (whsec_ wired)
+- [x] Push remaining secrets to mumega-edge (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET)
+- [x] Dashboard plugin (tenant dashboard, metrics, health)
+- [x] Onboarding wizard plugin (5-step new customer setup flow)
+- [x] Notifications plugin (in-app + email notification system)
 
-## Phase 3 — Test (Mock Customers)
+## Phase 3 — Test with Mock Customers (Current)
 
 - [ ] Full E2E journey: signup → checkout → MCP connect → remember/recall → publish → marketplace
 - [ ] Test all 5 platform configs (Claude Code, Claude Desktop, Cursor, ChatGPT, generic)

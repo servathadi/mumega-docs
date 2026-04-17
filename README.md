@@ -32,7 +32,7 @@ Mirror Squad Inkwell Glass ToRivers
 | Mirror | :8844 | Cognitive memory (21K engrams, pgvector, Gemini embeddings) |
 | Squad Service | :8060 | Task management (11 squads, 123 tasks, 47 skills) |
 | SaaS Service | :8075 | Tenant lifecycle, billing, builds (13 tenants) |
-| Inkwell Worker | Cloudflare | Multi-tenant sites, Glass Commerce, MCP server |
+| Inkwell Worker v5.2.0 | Cloudflare | Multi-tenant sites, Glass Commerce, MCP server (12 plugins: core, glass, mcp-server, dashboard, rbac, onboarding, notifications, blog, ecommerce, seo, analytics, team) |
 | mumega-edge | Cloudflare | Edge auth, signup, magic link sessions |
 
 ### Public URLs
